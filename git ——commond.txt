@@ -1,0 +1,151 @@
+﻿1. 安装yum -y install git
+2./新建git   ->mkdir  xue   -> 新建远程仓库 git --bare init ./
+3.本地克隆  git clone root@47.95.202.137:/git/xue
+4.写文本，试试提交 （与此同时  服务器新建/  worker 文件 然后 克隆一下服务器克隆服务器   git clone  /git/xue     提交后的文本  git pull 查看是否成功）
+5. 在本地 生成    ssh-keygen -t rsa -C 'lala@win'  （在c盘里 这是root用户的）
+6.服务器 上 home 添加用户组 useradd  xiao 
+7.在服务器cd   git/xiao 里 mkdir .ssh  新建 vim authorized_keys  吧生成密钥放进去
+8.在本地查看 哪个用户 git remote -v
+   本地切换远程仓库的  git remote set-url origin xiao@192.168.244.133:/git/xue
+   本地在重新生成一个ssh    ssh-keygen -t rsa -C '普通用户'
+   然后把新生成的ssh  放在服务器里 git/xiao  放在 authorized_keys
+   服务器修改 普通 用户的 权限  chown xiao:xiao git -R
+   在本地提交测试，看是否输入密码 
+
+两次在本地生成密钥：放到 （普通用户）git/xiao /.ssh/authorized_keys
+
+
+1、新建远程仓库
+		git --bare init  路径
+2、在开发环境上连接远程仓库  
+		git clone *****
+                               git clone root@47.95.202.137:/git/xue
+3、提交新文件来测试GIT  
+		git status :查看当前有多少要加入版本库的文件
+		git add ./ :加入所有当前目录下新的文件到内存中
+		git commit -m '描述'：提交到本地仓库
+		git push/git pull  origin master: 提交到远程仓库
+   
+git pull  origin master  更新windows版本提交的信息
+’
+4、GIT返回前一个版本
+		git log查看当前版本号  / 查看信息
+
+		git reset --hard 版本号 #版本号最少4位
+		
+		
+		
+5、如果版本发生改变，则会产生冲突，则先
+       git pull 
+       打开文件修改内容，解决冲突
+       git push : 推送到远程仓库
+	   
+-----解决频繁输入密码-
+		1、超级管理员公钥设置？
+		  答：把公钥放到服务器/root/.ssh/authorized_keys文件中
+		2、普通用户的公钥设置？
+		  答：把公钥放到服务器/home/用户/.ssh/authorized_keys文件中
+		3、win下的putty不识别密钥，如何解决？
+		4、linux下是否识别？
+		  答：识别
+	-----
+6、SSH生成公钥/密钥
+		
+		ssh-keygen -t rsa -C '说明注释'
+	
+
+{}{}{}{
+root用户分配给创建的普通用户
+去git 分配权限
+}		
+7、当远程仓库的用户组发生改变时，客户端也需要发生改变
+        git remote -v #查看当前GIT地址
+        git remote set-url origin 用户@IP:仓库地址		#重新设置GIT地址也就是切换
+ 
+
+8.避免代码混乱 ： 
+
+远程仓库   《------主分支--无bug----》  本地仓库
+
+主分支 master ：稳定，存储无bug，经过严格测试的
+从分支 ：存储每一个开发者正在开发的代码
+命令： git branch  从分支的名称  #新建从分支
+           git checketout  分支名称   #切换从分支
+           git push origun 分支名称  # 吧本地从分支推动到远程分支
+
+9 .  拉取远程的从分支	
+     1.先新建一个本地分支       git branch 分支名
+     2.拉取远程分支                git  pull origin 分支名
+
+10.   1.  git add ./    或   git add --all	
+        2.  git  merge '从分支' ：合并 ，在主分支合并
+        3.  git  checkout   -b '分支名'      #新建从分支并切换到从分支上
+
+        4.git reset  清除加入内存中的 文件
+
+
+11.git 自动部署
+unset GIT_INDEX_FILE
+13.55  差自动部署，需下载xmind
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+************
+******Git基本常用命令如下：
+   mkdir：         XX (创建一个空目录 XX指目录名)
+   pwd：          显示当前目录的路径。
+   git init          把当前的目录变成可以管理的git仓库，生成隐藏.git文件。
+   git add XX       把xx文件添加到暂存区去。
+   git commit –m “XX”  提交文件 –m 后面的是注释。
+   git status        查看仓库状态
+   git diff  XX      查看XX文件修改了那些内容
+   git log          查看历史记录
+   git reset  –hard HEAD^ 或者 git reset  –hard HEAD~ 回退到上一个版本
+                        (如果想回退到100个版本，使用git reset –hard HEAD~100 )
+   cat XX         查看XX文件内容
+   git reflog       查看历史记录的版本号id
+   git checkout — XX  把XX文件在工作区的修改全部撤销。
+   git rm XX          删除XX文件
+   git remote add origin https://github.com/tugenhua0707/testgit 关联一个远程库
+   git push –u(第一次要用-u 以后不需要) origin master 把当前master分支推送到远程库
+   git clone https://github.com/tugenhua0707/testgit  从远程库中克隆
+   git checkout –b dev  创建dev分支 并切换到dev分支上
+   git branch  查看当前所有的分支
+   git checkout master 切换回master分支
+   git merge dev    在当前的分支上合并dev分支
+   git branch –d dev 删除dev分支
+   git branch name  创建分支
+   git stash 把当前的工作隐藏起来 等以后恢复现场后继续工作
+   git stash list 查看所有被隐藏的文件列表
+   git stash apply 恢复被隐藏的文件，但是内容不删除
+   git stash drop 删除文件
+   git stash pop 恢复文件的同时 也删除文件
+   git remote 查看远程库的信息
+   git remote –v 查看远程库的详细信息
+   git push origin master  Git会把master分支推送到远程库对应的远程分支上
+
+
+
+
+
+
+
+		
